@@ -1,2 +1,2 @@
-# Yut_Game_Project
+# Yut-Game-Project
 Human ICT Software Engineering Team Project
