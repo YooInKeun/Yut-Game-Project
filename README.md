@@ -1,2 +1,2 @@
 # Yut-Game-Project
-Human ICT Software Engineering Team Project
+Yut-Game Project with JAVA(Team Project)
