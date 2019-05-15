@@ -7,7 +7,7 @@ public class Player {
 		
 	}
 	void createPiece() {//말 생성
-		int a;
+		
 		
 	}
 	void throwYoot() {//윷 던지기
