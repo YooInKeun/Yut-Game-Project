@@ -2,6 +2,7 @@ package yootgame;
 
 import java.util.Random;
 
+// 윷은 윷놀이 게임에서 인스턴스를 만들 필요없이 클래스 자체로 한번만 만들어지면 되지 때문에 모든 변수를 static으로 만들어준다.
 public class Yoot {
 	
 	// 윷을 던져서 나온 값에 해당하는 플래그
@@ -12,229 +13,138 @@ public class Yoot {
 	public static final int YOOT = 4;		// 윷: 4칸 전진
 	public static final int MO = 5;			// 모: 5칸 전진
 	
-	public static final boolean SIDE_FLAT = true;	// 평평한 면을 나타내는 플래그 변수
-	public static final boolean SIDE_ROUND = false;	// 둥근 면을 나타내는 플래그 변수
+	public static final int SIDE_FLAT = 1;	// 평평한 면을 나타내는 플래그 변수
+	public static final int SIDE_ROUND = 0;	// 둥근 면을 나타내는 플래그 변수
 
-	private final float PROB_FLAT = 0.6f;	// 평평한 면이 나올 확률, 대체로  평평한 면이 나올 확률이 60%, 둥근 면이 나올 확률을 40%로 한다.
+	private static final float PROB_FLAT = 0.6f;	// 평평한 면이 나올 확률, 대체로  평평한 면이 나올 확률이 60%, 둥근 면이 나올 확률을 40%로 한다.
 	
-	private boolean backdo;	// 빽도를 담당할 윷가락
-	private boolean yoot1;	// 일반 윷가락1
-	private boolean yoot2;	// 일반 윷가락2
-	private boolean yoot3;	// 일반 윷가락3
+	private static int[] yootSticks = new int[4];	// 윷에 사용되는 윷가락 4개를 배열로 선언한다. 그중 첫번째에 해당되는 윷은 빽도에 해당하는 윷가락이다.
 	
-	private int yootValue;	// 윷을 던지고 나온 값
-	
-	// 생성자
-	Yoot(){
-		// 윷가락은 모두 둥근면이 나오도록 초기화 한다.
-		backdo = SIDE_ROUND;
-		yoot1 = SIDE_ROUND;
-		yoot2 = SIDE_ROUND;
-		yoot3 = SIDE_ROUND;
-		
-		yootValue = 0;
-	}
 	
 	
 	// 윷을 랜덤으로 던지는 메소드
-	public void throwing() {
-		Random random = new Random();
+	public static int throwing() {
+		Random random = new Random();	// 윷이 랜덤하게 던져질 수 있도록 랜덤값을 생성한다.
+		int sum = 0;					// 경우의 수를 확인해서 윷의 값을 정해주기 위해서 나온 값의 총합을 저장할 변수
 		
-		// 빽도 윷가락
-		if(random.nextFloat() <= PROB_FLAT)
+		// 총 4번(윷가락의 개수) 반복하면서 각각의 윷가락에 해당되는 면을 랜덤하게 바꿔주고 모든 값을 더해준다.
+		for(int i = 0; i < 4; i++)
 		{
-			// 평평한 면이 나온 경우
-			backdo = SIDE_FLAT;
+			if(random.nextFloat() <= PROB_FLAT)
+				// 평평한 면이 나온 경우
+				yootSticks[i] = SIDE_FLAT;
+			else
+				// 둥근 면이 나온 경우
+				yootSticks[i] = SIDE_ROUND;
+			
+			sum += yootSticks[i];
+		}
+		
+		// 경우의 수를 확인 해서 각각의 경우에 해당하는 윷의 값을 반환한다.
+		// 모: 모든 윷가락이 둥근 면이 나온 경우 (총합이 0인경우)
+		// 윷: 모든 윷가락이 평평한 면이 나온 경우 (총합이 4인 경우)
+		// 걸: 3개의 윷가락이 평평한 면이 나온 경우 (총합이 3인 경우)
+		// 개: 2개의 윷가락이 평평한 면이 나온 경우 (총합이 2인 경우)
+		// 빽도: 빽도에 해당하는 윷가락, 즉 첫번째 윷가락만 평평한 면이 나온 경우(총합이 1인 경우에서 첫번째만 평평한 면)
+		// 도: 빽도에 해당하는 윷가락이 아닌 나머지 윷가락 중 1개만 평평한 면이 나온 경우(총합이 1인 경우에서 첫번째 면이 둥근 면인 경우)
+		if(sum == 4 * SIDE_FLAT)
+		{
+			// 윷이 나온 경우
+			return YOOT;
+		}
+		else if(sum == 3 * SIDE_FLAT)
+		{
+			// 걸이 나온 경우
+			return GUL;
+		}
+		else if(sum == 2 * SIDE_FLAT)
+		{
+			// 개가 나온 경우
+			return GAE;
+		}
+		else if(sum == 1 * SIDE_FLAT)
+		{
+			if(yootSticks[0] == SIDE_FLAT)
+			{
+				// 빽도가 나온 경우
+				return BACKDO;
+			}
+			else
+			{
+				// 도가 나온 경우
+				return DO;
+			}
 		}
 		else
 		{
-			// 둥근 면이 나온 경우
-			backdo = SIDE_ROUND;
-		}
-		
-		// 윷가락1
-		if(random.nextFloat() <= PROB_FLAT)
-		{
-			// 평평한 면이 나온 경우
-			yoot1 = SIDE_FLAT;
-		}
-		else
-		{
-			// 둥근 면이 나온 경우
-			yoot1 = SIDE_ROUND;
-		}
-		
-		// 윷가락2
-		if(random.nextFloat() <= PROB_FLAT)
-		{
-			// 평평한 면이 나온 경우
-			yoot2 = SIDE_FLAT;
-		}
-		else
-		{
-			// 둥근 면이 나온 경우
-			yoot2 = SIDE_ROUND;
-		}
-		
-		// 윷가락3
-		if(random.nextFloat() <= PROB_FLAT)
-		{
-			// 평평한 면이 나온 경우
-			yoot3 = SIDE_FLAT;
-		}
-		else
-		{
-			// 둥근 면이 나온 경우
-			yoot3 = SIDE_ROUND;
+			// 모가 나온 경우
+			return MO;
 		}
 	}
 	
 	
 	// 빽도가 나오게 설정하는 메소드
-	public void setBackdo() {
-		backdo = SIDE_FLAT;
-		yoot1 = SIDE_ROUND;
-		yoot2 = SIDE_ROUND;
-		yoot3 = SIDE_ROUND;
+	public static int throwBackdo() {
+		yootSticks[0] = SIDE_FLAT;
+		yootSticks[1] = SIDE_ROUND;
+		yootSticks[2] = SIDE_ROUND;
+		yootSticks[3] = SIDE_ROUND;
+		
+		return BACKDO;
 	}
 	
 	
 	// 도가 나오게 설정하는 메소드
-	public void setDo() {
-		backdo = SIDE_ROUND;
-		yoot1 = SIDE_FLAT;
-		yoot2 = SIDE_ROUND;
-		yoot3 = SIDE_ROUND;
+	public static int throwDo() {
+		yootSticks[0] = SIDE_ROUND;
+		yootSticks[1] = SIDE_FLAT;
+		yootSticks[2] = SIDE_ROUND;
+		yootSticks[3] = SIDE_ROUND;
+		
+		return DO;
 	}
 	
 	
 	// 개가 나오게 설정하는 메소드
-	public void setGae() {
-		backdo = SIDE_FLAT; 
-		yoot1 = SIDE_FLAT;
-		yoot2 = SIDE_ROUND;
-		yoot3 = SIDE_ROUND;
+	public static int throwGae() {
+		yootSticks[0] = SIDE_FLAT; 
+		yootSticks[1] = SIDE_FLAT;
+		yootSticks[2] = SIDE_ROUND;
+		yootSticks[3] = SIDE_ROUND;
+		
+		return GAE;
 	}
 	
 	
 	// 걸이 나오게 설정하는 메소드
-	public void setGul() {
-		backdo = SIDE_ROUND;
-		yoot1 = SIDE_FLAT;
-		yoot2 = SIDE_FLAT;
-		yoot3 = SIDE_FLAT;
+	public static int throwGul() {
+		yootSticks[0] = SIDE_ROUND;
+		yootSticks[1] = SIDE_FLAT;
+		yootSticks[2] = SIDE_FLAT;
+		yootSticks[3] = SIDE_FLAT;
+		
+		return GUL;
 	}
 	
 	
 	// 윷이 나오게 설정하는 메소드
-	public void setYoot() {
-		backdo = SIDE_FLAT;
-		yoot1 = SIDE_FLAT;
-		yoot2 = SIDE_FLAT;
-		yoot3 = SIDE_FLAT;
+	public static int throwYoot() {
+		yootSticks[0] = SIDE_FLAT;
+		yootSticks[1] = SIDE_FLAT;
+		yootSticks[2] = SIDE_FLAT;
+		yootSticks[3] = SIDE_FLAT;
+		
+		return YOOT;
 	}
 	
 	
 	// 모가 나오게 설정하는 메소드
-	public void setMo() {
-		backdo = SIDE_ROUND;
-		yoot1 = SIDE_ROUND;
-		yoot2 = SIDE_ROUND;
-		yoot3 = SIDE_ROUND;
-	}
-	
-	
-	// 현재 나온 윷의 값으로 변경해주는 메소드
-	public void setYootValue() {
-		// 모
-		if(backdo == SIDE_ROUND && yoot1 == SIDE_ROUND && yoot2 == SIDE_ROUND && yoot3 == SIDE_ROUND)
-		{
-			// 윷가락 모두 둥근 면이 나온 경우 모
-			yootValue = MO;
-		}
-		// 윷
-		else if(backdo == SIDE_FLAT && yoot1 == SIDE_FLAT && yoot2 == SIDE_FLAT && yoot3 == SIDE_FLAT)
-		{
-			// 윷가락 모두 평평한 면이 나온 경우 윷
-			yootValue = YOOT;
-		}
-		// 빽도
-		else if(backdo == SIDE_FLAT && yoot1 == SIDE_ROUND && yoot2 == SIDE_ROUND && yoot3 == SIDE_ROUND)
-		{
-			// 빽도를 담당하는 윷가락만 평평한 면이고 나머지는 모두 둥근 면인 경우 빽도
-			yootValue = BACKDO;
-		}
-		// 도
-		else if((backdo == SIDE_ROUND && yoot1 == SIDE_FLAT && yoot2 == SIDE_ROUND && yoot3 == SIDE_ROUND)||
-				(backdo == SIDE_ROUND && yoot1 == SIDE_ROUND && yoot2 == SIDE_FLAT && yoot3 == SIDE_ROUND)||
-				(backdo == SIDE_ROUND && yoot1 == SIDE_ROUND && yoot2 == SIDE_ROUND && yoot3 == SIDE_FLAT))
-		{	
-			// 빽도를 담당하는 윷가락은 평평한 면이고 나머지 윷가락 중에 하나만 평평한 면일 경우 도
-			yootValue = DO;
-		}
-		// 개
-		else if((backdo == SIDE_FLAT && yoot1 == SIDE_FLAT && yoot2 == SIDE_ROUND && yoot3 == SIDE_ROUND)||
-				(backdo == SIDE_FLAT && yoot1 == SIDE_ROUND && yoot2 == SIDE_FLAT && yoot3 == SIDE_ROUND)||
-				(backdo == SIDE_FLAT && yoot1 == SIDE_ROUND && yoot2 == SIDE_ROUND && yoot3 == SIDE_FLAT)||
-				(backdo == SIDE_ROUND && yoot1 == SIDE_FLAT && yoot2 == SIDE_FLAT && yoot3 == SIDE_ROUND)||
-				(backdo == SIDE_ROUND && yoot1 == SIDE_FLAT && yoot2 == SIDE_ROUND && yoot3 == SIDE_FLAT)||
-				(backdo == SIDE_ROUND && yoot1 == SIDE_ROUND && yoot2 == SIDE_FLAT && yoot3 == SIDE_FLAT))
-		{
-			// 윷가락 중에 2개만 평평한 면일 경우 개
-			yootValue = GAE;
-		}
-		// 걸
-		else if((backdo == SIDE_ROUND && yoot1 == SIDE_FLAT && yoot2 == SIDE_FLAT && yoot3 == SIDE_FLAT)||
-				(backdo == SIDE_FLAT && yoot1 == SIDE_ROUND && yoot2 == SIDE_FLAT && yoot3 == SIDE_FLAT)||
-				(backdo == SIDE_FLAT && yoot1 == SIDE_FLAT && yoot2 == SIDE_ROUND && yoot3 == SIDE_FLAT)||
-				(backdo == SIDE_FLAT && yoot1 == SIDE_FLAT && yoot2 == SIDE_FLAT && yoot3 == SIDE_ROUND))
-		{
-			// 윷가락 중에 1개만 둥근 면일 경우 걸
-			yootValue = GUL;
-		}
+	public static int throwMo() {
+		yootSticks[0] = SIDE_ROUND;
+		yootSticks[1] = SIDE_ROUND;
+		yootSticks[2] = SIDE_ROUND;
+		yootSticks[3] = SIDE_ROUND;
 		
-		else
-		{
-			// 위의 모든 경우에 해당 되지 않으면 0을 반환해서 오류를 확인할 수 있도록 한다.
-			yootValue = 0;
-		}
-	}
-	
-	
-	public int getYootValue() {
-		return yootValue;
-	}
-	
-	
-	// 현재 나온 윷의 값을 출력하는 메소드
-	public void printYootValue() {
-		if(yootValue == BACKDO)
-		{
-			System.out.println("빽도");
-		}
-		else if(yootValue == DO)
-		{
-			System.out.println("도");
-		}
-		else if(yootValue == GAE)
-		{
-			System.out.println("개");
-		}
-		else if(yootValue == GUL)
-		{
-			System.out.println("걸");
-		}
-		else if(yootValue == YOOT)
-		{
-			System.out.println("윷");
-		}
-		else if(yootValue == MO)
-		{
-			System.out.println("모");
-		}
-		else
-		{
-			System.out.println("오류");
-		}
+		return MO;
 	}
 }
