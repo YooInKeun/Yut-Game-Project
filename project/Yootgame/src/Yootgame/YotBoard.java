@@ -27,12 +27,43 @@ public class YotBoard extends JFrame {
 		setCursor(newcursor);
 		panelPan = new JPanel();
 		panButton = new JButton [3][21];
-		int xpos=buttonSizeX*8;
+		int xpos=buttonSizeX*7;
 		int ypos=buttonSizeY*7;
+		double buttonInterval=buttonSizeX*1.25;
    	 	panelPan.setLayout(null);
    	 	panelPan.setBackground(new Color(255,255,255));
-   	 	int p=0;
-		for(int i=0;i<25;i++)//0~20
+   	 	for(int i=1;i<21;i++)
+   	 	{
+   	 		if(i<6) {
+   	 			ypos -= buttonInterval;
+   	 		}
+   	 		else if(i<11) {
+   	 			xpos -= buttonInterval;
+   	 		}
+   	 		else if(i<16) {
+   	 			ypos += buttonInterval;
+   	 		}
+   	 		else {
+   	 			xpos += buttonInterval;
+   	 		}
+   	 	
+			if(i==5 || i==10 || i==15){
+				panButton[0][i] = new JButton(new ImageIcon("./img/bigcircle.jpg"));
+			}
+			else if(i==20) {
+				panButton[0][i] = new JButton(new ImageIcon("./img/startcircle.jpg"));
+			}
+			else {
+				panButton[0][i] = new JButton(new ImageIcon("./img/circle.jpg"));
+			}
+			panButton[0][i].setLocation(xpos,ypos);
+			panButton[0][i].setSize(buttonSizeX,buttonSizeY);
+			panButton[0][i].setBorderPainted(false);
+			panButton[0][i].setContentAreaFilled(false);
+			panelPan.add(panButton[0][i]);
+			panButton[0][i].addActionListener(play);
+   	 	}
+		/*for(int i=0;i<25;i++)//0~20
 		{
 			if(i<7)
 			{
@@ -68,9 +99,10 @@ public class YotBoard extends JFrame {
 				}
 				p++;
 			}
-		}
-		ypos =0;
-		xpos =buttonSizeX*8;
+		}*/
+		ypos =buttonSizeY-10;
+		xpos =buttonSizeX*7-10;
+		int p;
 		for(p=0;p<6;p++)
 		{
 			
@@ -99,8 +131,8 @@ public class YotBoard extends JFrame {
 				}
 			}
 		}
-		xpos = buttonSizeX*2;
-		ypos = 0;
+		xpos = buttonSizeX-10;
+		ypos = buttonSizeY-10;
 		for(p=0;p<6;p++)
 		{
 			if(p==0) {
@@ -164,8 +196,8 @@ public class YotBoard extends JFrame {
 		panelPan.add(yotResult);
 		
 		boardMessage = new JLabel("P0 차례");
-		boardMessage.setSize(300,60);
-		boardMessage.setLocation(50,350);
+		boardMessage.setSize(300,50);
+		boardMessage.setLocation(50,400);
 		panelPan.add(boardMessage);
 		
 		playerInfo=new JLabel[4];
