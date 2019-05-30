@@ -9,8 +9,8 @@ public class YotBoard extends JFrame {
 	private PlayGame play;
 	private int windowSizeX=1000;
 	private int windowSizeY=700;
-	private int buttonSizeX = 50;
-	private int buttonSizeY = 50;
+	private int buttonSizeX = windowSizeX/20;
+	private int buttonSizeY = buttonSizeX;
 	JButton throwButton, newPiece;
 	JButton []testButton = new JButton[7];
 	JButton nowPlayer;
@@ -56,50 +56,10 @@ public class YotBoard extends JFrame {
 			else {
 				panButton[0][i] = new JButton(new ImageIcon("./img/circle.jpg"));
 			}
-			panButton[0][i].setLocation(xpos,ypos);
-			panButton[0][i].setSize(buttonSizeX,buttonSizeY);
-			panButton[0][i].setBorderPainted(false);
-			panButton[0][i].setContentAreaFilled(false);
+			panButton[0][i] = createBoardBtn(panButton[0][i],xpos,ypos,buttonSizeX,buttonSizeY,false);
 			panelPan.add(panButton[0][i]);
 			panButton[0][i].addActionListener(play);
    	 	}
-		/*for(int i=0;i<25;i++)//0~20
-		{
-			if(i<7)
-			{
-				ypos -= buttonSizeY;
-			}else if(i<13)
-			{
-				xpos -= buttonSizeX;
-			}
-			else if(i<19)
-			{
-				ypos += buttonSizeY;
-			}else
-			{
-				xpos += buttonSizeX;
-			}
-			if(i!=3 && i!=9 &&i!=15 &&i!=21) {
-				if(p!=0) {
-					if(p==5 || p==10 || p==15){
-						panButton[0][p] = new JButton(new ImageIcon("./img/bigcircle.jpg"));
-					}
-					else if(p==20) {
-						panButton[0][p] = new JButton(new ImageIcon("./img/startcircle.jpg"));
-					}
-					else {
-						panButton[0][p] = new JButton(new ImageIcon("./img/circle.jpg"));
-					}
-					panButton[0][p].setLocation(xpos,ypos);
-					panButton[0][p].setSize(buttonSizeX,buttonSizeY);
-					panButton[0][p].setBorderPainted(false);
-					panButton[0][p].setContentAreaFilled(false);
-					panelPan.add(panButton[0][p]);
-					panButton[0][p].addActionListener(play);
-				}
-				p++;
-			}
-		}*/
 		ypos =buttonSizeY-10;
 		xpos =buttonSizeX*7-10;
 		int p;
@@ -119,13 +79,9 @@ public class YotBoard extends JFrame {
 				else 
 				{
 					panButton[1][p] = new JButton(new ImageIcon("./img/circle.jpg"));
-					//panButton[1][p] = new JButton(Integer.toString(p));
-					panButton[1][p].setLocation(xpos,ypos);
+					panButton[1][p] = createBoardBtn(panButton[1][p],xpos,ypos,buttonSizeX,buttonSizeY,false);
 					xpos -= buttonSizeX;
 					ypos += buttonSizeY;
-					panButton[1][p].setSize(buttonSizeX,buttonSizeY);
-					panButton[1][p].setBorderPainted(false);
-					panButton[1][p].setContentAreaFilled(false);
 					panelPan.add(panButton[1][p]);
 					panButton[1][p].addActionListener(play);
 				}
@@ -143,51 +99,39 @@ public class YotBoard extends JFrame {
 			{
 				if(p==3) {
 					panButton[2][p] = new JButton(new ImageIcon("./img/bigcircle.jpg"));
+					JButton arrow = new JButton(new ImageIcon("./img/leftup.jpg"));
+					arrow = createBoardBtn(arrow,xpos-buttonSizeX,ypos,buttonSizeX/2,buttonSizeY/2,false);
+					panelPan.add(arrow);
 				}else{
 					panButton[2][p] = new JButton(new ImageIcon("./img/circle.jpg"));
 				}
-				panButton[2][p].setLocation(xpos,ypos);
+				panButton[2][p] = createBoardBtn(panButton[2][p],xpos,ypos,buttonSizeX,buttonSizeY,false);
 				xpos += buttonSizeX;
 				ypos += buttonSizeY;
-				panButton[2][p].setSize(buttonSizeX,buttonSizeY);
-				panButton[2][p].setBorderPainted(false);
-				panButton[2][p].setContentAreaFilled(false);
 				panelPan.add(panButton[2][p]);
 				panButton[2][p].addActionListener(play);
 			}
 		}
 		
 		throwButton = new JButton("윷 던지기");
-		throwButton.setSize(150,50);
-		throwButton.setBorderPainted(true);
-		throwButton.setContentAreaFilled(true);
-		throwButton.setLocation(450,500);
+		throwButton = createBoardBtn(throwButton,buttonSizeX*9,buttonSizeY*10,buttonSizeX*3,buttonSizeY,true);
 		throwButton.setBackground(new Color(255,255,0));
 		panelPan.add(throwButton);
 		throwButton.addActionListener(play);
 		
-		panClick = new JButton("판 클릭");
-		panClick.setSize(150,50);
-		panClick.setBorderPainted(true);
-		panClick.setContentAreaFilled(true);
-		panClick.setLocation(450,450);
+		panClick = new JButton("윷 판을 클릭하세요");
+		panClick = createBoardBtn(panClick,buttonSizeX*9,buttonSizeY*9,buttonSizeX*3,buttonSizeY,true);
 		panClick.setBackground(new Color(153,204,255));
 		panelPan.add(panClick);
 		
 		newPiece = new JButton("새로운 말 꺼내기");
-		newPiece.setSize(150,50);
-		newPiece.setBorderPainted(true);
-		newPiece.setContentAreaFilled(true);
-		newPiece.setLocation(450,550);
+		newPiece = createBoardBtn(newPiece,buttonSizeX*9,buttonSizeY*11,buttonSizeX*3,buttonSizeY,true);
 		newPiece.setBackground(new Color(153,204,255));
 		panelPan.add(newPiece);
 		newPiece.addActionListener(play);
 		
 		nowPlayer = new JButton();
-		nowPlayer.setBorderPainted(false);
-		nowPlayer.setContentAreaFilled(false);
-		nowPlayer.setSize(200,70);
-		nowPlayer.setLocation(50,500);
+		nowPlayer = createBoardBtn(nowPlayer,buttonSizeX,buttonSizeY*10,buttonSizeX*4,buttonSizeY,false);
 		panelPan.add(nowPlayer);
 		
 		yotResult = new JLabel();
@@ -211,13 +155,10 @@ public class YotBoard extends JFrame {
 		{
 			playerInfobtn[i] = new JButton();
 			playerInfobtn[i].setIcon(img[i]);
-			playerInfobtn[i].setSize(50, 50);
-			playerInfobtn[i].setBorderPainted(false);
-			playerInfobtn[i].setContentAreaFilled(false);
-			playerInfobtn[i].setLocation(450,i*50);
-			playerInfo[i] = new JLabel();
+			playerInfobtn[i] = createBoardBtn(playerInfobtn[i],buttonSizeX*9,i*buttonSizeY,buttonSizeX,buttonSizeY,false);
+			playerInfo[i] = new JLabel("X");
 			playerInfo[i].setSize(500,50);
-			playerInfo[i].setLocation(500,i*50);
+			playerInfo[i].setLocation(buttonSizeX*10,i*buttonSizeY);
 			panelPan.add(playerInfobtn[i]);
 			panelPan.add(playerInfo[i]);
 		}
@@ -231,10 +172,7 @@ public class YotBoard extends JFrame {
 		for(int q=0;q<6;q++)
 		{
 			testButton[q] = new JButton(s[q]);
-			testButton[q].setSize(60,60);
-			testButton[q].setBorderPainted(true);
-			testButton[q].setContentAreaFilled(true);
-			testButton[q].setLocation(50+q*60,450);
+			testButton[q] = createBoardBtn(testButton[q],buttonSizeX+q*60,buttonSizeY*9,buttonSizeX+10,buttonSizeY+10,true);
 			panelPan.add(testButton[q]);
 			testButton[q].addActionListener(play);
 		}
@@ -243,6 +181,14 @@ public class YotBoard extends JFrame {
         this.setTitle("Yot play");
         this.setVisible(true);
         this.setSize(windowSizeX, windowSizeY);
+	}
+	JButton createBoardBtn(JButton btn, int x, int y, int width, int depth, boolean tf)
+	{
+		btn.setSize(width, depth);
+		btn.setBorderPainted(tf);
+		btn.setContentAreaFilled(tf);
+		btn.setLocation(x,y);
+		return btn;
 	}
 	void refreashFrame()//changeplayer와 printyotresult 화면 갱신때 빈칸으로 만듬
 	{
@@ -286,8 +232,9 @@ public class YotBoard extends JFrame {
 		}
 		yotResult.setText(text);
 	}
-	void printPiece(int player, int posx, int posy)
+	void printPiece(int player, int posx, int posy, int num)
 	{
+
 		if(posx==0 && posy==0)
 		{
 			posx=0;
@@ -309,73 +256,56 @@ public class YotBoard extends JFrame {
 		}
 		if(player == 0)
 		{
-			if((posx==0 && posy==5) || posy==10 || posy == 15 || (posx==2 && posy==3)) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/bigred.jpg"));
-			}
-			else if(posy==20) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/startred.jpg"));
-			}
-			else {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/red.jpg"));
-			}
+			printBtn("red",posx,posy,num);
 		}
 		else if(player == 1)
 		{
-			if((posx==0 && posy==5) || posy==10 || posy == 15 || (posx==2 && posy==3)) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/bigblue.jpg"));
-			}
-			else if(posy==20) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/startblue.jpg"));
-			}
-			else {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/blue.jpg"));
-			}
+			printBtn("blue",posx,posy,num);
 		}
 		else if(player == 2)
 		{
-			if((posx==0 && posy==5) || posy==10 || posy == 15 || (posx==2 && posy==3)) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/biggreen.jpg"));
-			}
-			else if(posy==20) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/startgreen.jpg"));
-			}
-			else {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/green.jpg"));
-			}
+			printBtn("green",posx,posy,num);
 		}
 		else if(player == 3)
 		{
-			if((posx==0 && posy==5) || posy==10 || posy == 15 || (posx==2 && posy==3)) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/bigyellow.jpg"));
-			}
-			else if(posy==20) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/startyellow.jpg"));
-			}
-			else {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/yellow.jpg"));
-			}
+			printBtn("yellow",posx,posy,num);
 		}
 		else if(player == 4)//흰색 판으로 다시 되돌림
 		{
-			if((posx==0 && posy==5) || posy==10 || posy == 15 || (posx==2 && posy==3)) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/bigcircle.jpg"));
-			}
-			else if(posy==20) {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/startcircle.jpg"));
-			}
-			else {
-				panButton[posx][posy].setIcon(new ImageIcon("./img/circle.jpg"));
-			}
+			printBtn("circle",posx,posy,0);
 		}
-		/*else if(player == 5)//이건 미리가기용도
-		{
-			panButton[posx][posy].setIcon(new ImageIcon("./img/yellow.jpg"));
-		}*/
 		else
 		{
 			//System.out.println("printmal error");
 		}
 		
+	}
+	void printBtn(String color, int posx, int posy, int num)
+	{
+		String url="";
+		if(num != 0) {
+			if((posx==0 && posy==5) || posy==10 || posy == 15 || (posx==2 && posy==3)) {
+				url = "./img/big"+color+num+".jpg";
+			}
+			else if(posy==20) {
+				url = "./img/start"+color+num+".jpg";
+			}
+			else {
+				url = "./img/"+color+num+".jpg";
+			}
+		}
+		else {
+			if((posx==0 && posy==5) || posy==10 || posy == 15 || (posx==2 && posy==3)) {
+				url = "./img/bigcircle.jpg";
+			}
+			else if(posy==20) {
+				url = "./img/startcircle.jpg";
+			}
+			else {
+				url = "./img/circle.jpg";
+			}
+		}
+		panButton[posx][posy].setIcon(new ImageIcon(url));
 	}
 	void message(String s)
 	{

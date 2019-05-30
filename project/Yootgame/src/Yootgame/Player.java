@@ -5,14 +5,12 @@ import java.util.ArrayList;
 public class Player {
 	private int id;
 	private ArrayList<Piece> pieces;
-	//private ArrayList<Piece> ghost;
 	private int point;
 	private int pieceNum;//아직 윷판에 안나오고 대기중인 말 수
 	
 	public Player(int id, int pieceNum){
 		this.id = id;
 		this.pieces = new ArrayList<Piece>();
-		//this.ghost = new ArrayList<Piece>();
 		this.point =0;
 		this.pieceNum = pieceNum;
 	}
@@ -26,6 +24,37 @@ public class Player {
 	public int getPieceNum(){
 		return this.pieceNum;
 	}
+	public int getPieceUpdaNum(int x, int y) {
+		int a=0;
+		if(x==0 && y==0)
+		{
+			x=0;
+			y=20;
+		}
+		else if(x==0 && y==-1)
+		{
+			x=0;
+			y=19;
+		}
+		else if(x==1 && y==3)
+		{
+			x=2;
+			y=3;
+		}
+		else if(y>20)
+		{
+			return 0;
+		}
+		for(Piece piece : pieces)
+		{
+			if(piece.getX()==x && piece.getY()==y)
+			{
+				a = piece.getPoint();
+				break;
+			}
+		}
+		return a;
+	}
 	public int createPiece(){
 		if(pieceNum>0)
 		{
@@ -38,18 +67,9 @@ public class Player {
 	}
 	public String playerPiece(){
 		String s="";
-		for(Piece piece : pieces)
-		{
-			s += "<남말:"+pieceNum+"포:"+point+">("+piece.getX()+","+piece.getY()+","+piece.getPoint()+")";
-		}
+		s = "<남은 말:"+pieceNum+" 포인트:"+point+">";
 		return s;
 	}
-	/*public void wheremove(int posX, int posY, int active) {//판위에 올라갈 수 있는 말들의 갈 수 있는 위치 출력
-	
-		//ghost.addAll(mal);
-		//일단 보류하고 만들자
-	}*/
-	
 	public int move(int x, int y, int active) {  //(말 위치, 도개걸윷 정보를 보내주면) 무슨 말을 움직일까요?		
 		if(pieces.size()!=0)
 		{
@@ -58,8 +78,6 @@ public class Player {
 				if(piece.getX()==x && piece.getY()==y)//(말 위치에 있는 말을 찾고 도개걸윷 만큼 이동시킴)
 				{
 					piece.setPos(active);
-					//ghost.removeAll(ghost);
-					//ghost.addAll(mal);
 				}
 			}
 			return checkUpda();

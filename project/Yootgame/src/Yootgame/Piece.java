@@ -24,9 +24,9 @@ public class Piece {
 	}
 	
 	public void setPos(int act){
-		fixpos_1(act);//두두번번  확확인인해해야야  버버그그  없없어어짐짐
+		fixpos_1(act);//두두번번  확확인인해해야야  버버그그  없없어어짐짐 대각선으로 타고 들어갈때 좌표 바꿔주기
 		y += act;
-		fixpos_2(act);//두두번번  확확인인해해야야  버버그그  없없어어짐짐
+		fixpos_2(act);//두두번번  확확인인해해야야  버버그그  없없어어짐짐 대각선 내부에서 일어나는 좌표 바꿔주기
 	}
 	public void setPoint(int a){
 		point += a;//업었을때 업힌거 갯수

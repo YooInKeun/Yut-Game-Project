@@ -98,7 +98,7 @@ public class PlayGame implements ActionListener{
 			{
 				nowPlayer.move(0, 0, result); //여기서 알아서 업어가는지 판단해줌
 				board.setplayerInfo(turn, nowPlayer.playerPiece());
-				board.printPiece(turn,0,result);//플레이어, 이동 이후 좌표
+				board.printPiece(turn,0,result,nowPlayer.getPieceUpdaNum(0,result));//플레이어, 이동 이후 좌표
 				phaze2changeBtncolor();//UI 버튼 색깔 변경
 				if(checkCatch(turn)==1 || result == 4 || result ==5)//다시 윷 던지기 조건
 				{
@@ -121,6 +121,7 @@ public class PlayGame implements ActionListener{
 	void phaze3Pieceact(int posx, int posy)
 	{
 		int index;
+		int x,y,point;
 		if(control==3)
 		{// if(지금 플레이어가 판 위에 올려 놓은 말의 갯수가 0 && 지금 플레이어의 남은 말 0 이상(남은 말=전체 말 - 골인한 말))
 			if(nowPlayer.getPiece().size()==0 && nowPlayer.getPieceNum()>0)//판위에 말이 없고 대기중인 말이 있다면 0,0에 새로 만들고
@@ -130,14 +131,21 @@ public class PlayGame implements ActionListener{
 			}
 			else
 			{
-				index = nowPlayer.checkEnable(posx, posy);//해당 버튼에 말이 있는지 확인
+				index = nowPlayer.checkEnable(posx, posy);//해당 버튼에 말이 있는지 확인 있으면 말 배열에 인덱스 반환
 				if(index!=-1)
 				{
 					//말이 있으면 Player에서 알아서 찾고 도개걸 결과로 이동함
-					board.printPiece(4, posx, posy);//가기전에 흰색으로 원상 복구 후 이동
+					board.printPiece(4, posx, posy, 0);//가기전에 흰색으로 원상 복구 후 이동
 					if(nowPlayer.move(posx, posy, result)==1) //여기서 알아서 업어가는지 판단해줌
 					{//들어가거나 겹쳐졌을때 화면에 표시를 안한다 이것때문에 자꾸 오류가 난다.
 						boardMessage("P "+turn+" 말 하나가 업혔습니다");
+						index = nowPlayer.checkEnable(posx, posy+result);
+						//이 지점에서 생기는 버그: 말 A가 이동해 말 B 위에 업혔다. 그럼 말 B point += 말 A point 하고 말 A 객체 삭제
+						//말 A가 삭제되었으니 piece(==말)의 Arraylist의 index에 말이 없어서 범위 익셉션 뜸 그래서 index를 갱신해 줘야함
+						x = nowPlayer.getPiece().get(index).getX();
+						y = nowPlayer.getPiece().get(index).getY();
+						point = nowPlayer.getPiece().get(index).getPoint();
+						board.printPiece(turn,x,y,point);
 					}
 					else if(nowPlayer.checkPiecein() ==1)
 					{
@@ -145,7 +153,10 @@ public class PlayGame implements ActionListener{
 					}
 					else
 					{
-						board.printPiece(turn,nowPlayer.getPiece().get(index).getX(),nowPlayer.getPiece().get(index).getY());//플레이어, 이동 이후 좌표
+						x = nowPlayer.getPiece().get(index).getX();
+						y = nowPlayer.getPiece().get(index).getY();
+						point = nowPlayer.getPiece().get(index).getPoint();
+						board.printPiece(turn,x,y,point);//플레이어, 이동 이후 좌표
 					}
 					board.setplayerInfo(turn, nowPlayer.playerPiece());
 					phaze2changeBtncolor();//UI 버튼 색깔 변경
