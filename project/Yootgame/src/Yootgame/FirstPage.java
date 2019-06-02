@@ -5,46 +5,24 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class FirstPage extends JFrame{
+	private static final int MAX_PLAYER = 3;
+	private static final int MAX_PIECE = 4;
 	private JPanel panel = new JPanel();
-	private JRadioButton playerNumbtn[] = new JRadioButton[3];
-	private JRadioButton pieceNumbtn[] = new JRadioButton[4];
+	private JRadioButton playerNumbtn[] = new JRadioButton[MAX_PLAYER];
+	private JRadioButton pieceNumbtn[] = new JRadioButton[MAX_PIECE];
 	private JButton start = new JButton("시작");
 	private ButtonGroup playerNumcheck = new ButtonGroup();
 	private ButtonGroup pieceNumcheck = new ButtonGroup();
+	private PlayConfig playConfig = new PlayConfig();
+	private PlayerAdapter playerAdapter = new PlayerAdapter(playConfig);
+	private PieceAdapter pieceAdapter = new PieceAdapter(playConfig);
 	private ActionListener listen = new ActionListener() {
     	public void actionPerformed(ActionEvent e) {
-    		int people=2, mal=2;
-    		if(playerNumbtn[2].isSelected()) {
-    			people = 4;
-    		}
-    		else if(playerNumbtn[1].isSelected())
-    		{
-    			people = 3;
-    		}
-    		else
-    		{
-    			people = 2;
-    		}
-    		if(pieceNumbtn[3].isSelected())
-    		{
-    			mal =5;
-    		}
-    		else if(pieceNumbtn[2].isSelected())
-    		{
-    			mal =4;
-    		}
-    		else if(pieceNumbtn[1].isSelected())
-    		{
-    			mal =3;
-    		}
-    		else
-    		{
-    			mal =2;
-    		}
+    		
     		if(e.getSource()==start)
     		{
-    			System.out.println(people+" , "+ mal);
-    			new PlayGame(people, mal);
+    			System.out.println(playConfig.getPlayerNum()+" , "+ playConfig.getPieceNum());
+    			new PlayGame(playConfig.getPlayerNum(), playConfig.getPieceNum());
     		}
     	}
     };
@@ -52,28 +30,27 @@ public class FirstPage extends JFrame{
         JLabel lb1, lb2;
         lb1 = new JLabel("사용자 수");
         panel.add(lb1);
-        for(int i=0;i<3;i++) {
-        	playerNumbtn[i] = new JRadioButton(Integer.toString(i+2));
+        for(int i = 0; i < playerNumbtn.length; i++) {
+        	playerNumbtn[i] = new JRadioButton();
+        	playerNumbtn[i].setText(Integer.toString(i+2));
         	playerNumcheck.add(playerNumbtn[i]);
         	panel.add(playerNumbtn[i]);
-        	playerNumbtn[i].addActionListener(listen);
+        	playerNumbtn[i].addActionListener(playerAdapter);
+        	
         }
         playerNumbtn[0].setSelected(true);
-        playerNumbtn[1].setSelected(false);
-        playerNumbtn[2].setSelected(false);
         
         lb2 = new JLabel("말 갯수");
         panel.add(lb2);
-        for(int i=0;i<4;i++) {
-        	pieceNumbtn[i] = new JRadioButton(Integer.toString(i+2));
+        for(int i = 0; i < pieceNumbtn.length; i++) {
+        	pieceNumbtn[i] = new JRadioButton();
+        	pieceNumbtn[i].setText(Integer.toString(i+2));
         	pieceNumcheck.add(pieceNumbtn[i]);
         	panel.add(pieceNumbtn[i]);
-        	pieceNumbtn[i].addActionListener(listen);
+        	pieceNumbtn[i].addActionListener(pieceAdapter);
         }
         pieceNumbtn[0].setSelected(true);
-        pieceNumbtn[1].setSelected(false);
-        pieceNumbtn[2].setSelected(false);
-        pieceNumbtn[3].setSelected(false);
+        
 
         start.setSelected(false);
         panel.add(start);
