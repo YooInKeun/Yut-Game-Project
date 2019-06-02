@@ -9,7 +9,6 @@ public class PieceAdapter implements ActionListener{
 	PlayConfig playConfig;
 	public PieceAdapter(PlayConfig playConfig) {
 		this.playConfig = playConfig;
-		System.out.println("adapter called");
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

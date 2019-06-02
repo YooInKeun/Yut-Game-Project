@@ -10,7 +10,6 @@ public class PlayerAdapter implements ActionListener{
 	PlayConfig playConfig;
 	public PlayerAdapter(PlayConfig playConfig) {
 		this.playConfig = playConfig;
-		System.out.println("adapter called");
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

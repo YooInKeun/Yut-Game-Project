@@ -7,7 +7,6 @@ public class Player {
 	private ArrayList<Piece> pieces;
 	private int point;
 	private int pieceNum;//아직 윷판에 안나오고 대기중인 말 수
-	
 	public Player(int id, int pieceNum){
 		this.id = id;
 		this.pieces = new ArrayList<Piece>();

@@ -159,7 +159,44 @@ public class PlayGame implements ActionListener{
 					if(nowPlayer.move(posx, posy, result)==1) //여기서 알아서 업어가는지 판단해줌
 					{//들어가거나 겹쳐졌을때 화면에 표시를 안한다 이것때문에 자꾸 오류가 난다.
 						boardMessage("P "+turn+" 말 하나가 업혔습니다");
-						index = nowPlayer.checkEnable(posx, posy+result);
+						if(posx == 0 && posy == 5) {
+							posx = 1;
+							posy = 0;
+						}
+						else if(posx == 0 && posy==10){
+							posx=2;
+							posy=0;
+						}
+						posy=posy+result;
+						if(result > 0) {
+							if(posx == 1 && posy==3)
+							{
+								posx=2;
+								posy=3;
+							}
+							else if(posx==1 && posy>5){
+								posx=0;
+								posy+=9;
+							}
+							else if(posx==2 && posy>5) {
+								posx=0;
+								posy+=14;
+							}
+						}else {
+							if(posx==1 && posy<1) {
+								posx=0;
+								posy=5+posy;
+							}else if(posx==1 && posy==3) {
+								posx=2;
+								posy=3;
+							}else if(posx==2 && posy<1) {
+								posx=0;
+								posy=10+posy;
+							}else if(posx==0 && posy<1) {
+								posy=20+posy;
+							}
+						}
+						index = nowPlayer.checkEnable(posx, posy);
 						//이 지점에서 생기는 버그: 말 A가 이동해 말 B 위에 업혔다. 그럼 말 B point += 말 A point 하고 말 A 객체 삭제
 						//말 A가 삭제되었으니 piece(==말)의 Arraylist의 index에 말이 없어서 범위 익셉션 뜸 그래서 index를 갱신해 줘야함
 						x = nowPlayer.getPieces().get(index).getX();
