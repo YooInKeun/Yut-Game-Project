@@ -14,9 +14,16 @@ public class Player {
 		this.point =0;
 		this.pieceNum = pieceNum;
 	}
-	public ArrayList<Piece> getPiece(){
+	
+	public ArrayList<Piece> getPieces(){
 		return this.pieces;
 	}
+	
+	public int getId()
+	{
+		return this.id;
+	}
+	
 	public int getPoint()
 	{
 		return this.point;

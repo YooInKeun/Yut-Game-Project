@@ -21,10 +21,20 @@ public class PlayGame implements ActionListener{
 		{
 			players[i] = new Player(i,mal);
 		}
-		board = new YotBoard(this);//yotboard에서 버튼이 클릭 되었다는 정보를 받기위해 본인 객체를 보냄
 		playerNum = people;
 		pieceNum = mal;
+		board = new YotBoard(this);//yotboard에서 버튼이 클릭 되었다는 정보를 받기위해 본인 객체를 보냄
+		
+		for(int i=0; i<playerNum; i++) {
+			board.setplayerInfo(i, players[i].playerPiece());
+		}
 	}
+	
+	public int getPlayerNum() {
+		
+		return playerNum;
+	}
+	
 	int checkFinish()
 	{
 		for(int i=0;i<players.length;i++)
@@ -42,10 +52,10 @@ public class PlayGame implements ActionListener{
 	{
 		Player catcher = players[index];//catcher는 지금의 플레이어
 		int posx,posy;
-		for(int q=0;q<catcher.getPiece().size();q++)//현재 플레이어의 모든 말
+		for(int q=0;q<catcher.getPieces().size();q++)//현재 플레이어의 모든 말
 		{
-			posx = catcher.getPiece().get(q).getX();
-			posy = catcher.getPiece().get(q).getY();//현재 플레이어의 q번째 말 위치
+			posx = catcher.getPieces().get(q).getX();
+			posy = catcher.getPieces().get(q).getY();//현재 플레이어의 q번째 말 위치
 			for(int i=0;i<players.length;i++)
 			{
 				if(i!=index)
@@ -74,7 +84,7 @@ public class PlayGame implements ActionListener{
 		if(control==1) {
 			result =0;
 			nowPlayer = players[turn];
-			if(nowPlayer.getPiece().size()==0 && nowPlayer.getPieceNum()>0) {//판위에 말이 없고 대기중인 말이 있다면 0,0에 새로 만들고
+			if(nowPlayer.getPieces().size()==0 && nowPlayer.getPieceNum()>0) {//판위에 말이 없고 대기중인 말이 있다면 0,0에 새로 만들고
 				boardMessage("판 위에 올라가 있는 말 없음");
 			}
 			else
@@ -85,6 +95,11 @@ public class PlayGame implements ActionListener{
 			result=Yoot.throwing();//던지기 버튼 클릭
 			board.printResult(result);//던진 결과 화면에 출력
 			phaze1changeBtncolor();//UI 버튼 색깔 변경
+			
+			for(int i=0; i<playerNum; i++) {
+				board.setplayerInfo(i, players[i].playerPiece());
+			}
+
 			control = 3;
 		}
 	}
@@ -97,7 +112,11 @@ public class PlayGame implements ActionListener{
 			if(nowPlayer.createPiece()==1) //대기중인 말의 수가 있다면 새로 생성 가능
 			{
 				nowPlayer.move(0, 0, result); //여기서 알아서 업어가는지 판단해줌
-				board.setplayerInfo(turn, nowPlayer.playerPiece());
+				
+				for(int i=0; i<playerNum; i++) {
+					board.setplayerInfo(i, players[i].playerPiece());
+				}
+				
 				board.printPiece(turn,0,result,nowPlayer.getPieceUpdaNum(0,result));//플레이어, 이동 이후 좌표
 				phaze2changeBtncolor();//UI 버튼 색깔 변경
 				if(checkCatch(turn)==1 || result == 4 || result ==5)//다시 윷 던지기 조건
@@ -122,9 +141,10 @@ public class PlayGame implements ActionListener{
 	{
 		int index;
 		int x,y,point;
+		
 		if(control==3)
 		{// if(지금 플레이어가 판 위에 올려 놓은 말의 갯수가 0 && 지금 플레이어의 남은 말 0 이상(남은 말=전체 말 - 골인한 말))
-			if(nowPlayer.getPiece().size()==0 && nowPlayer.getPieceNum()>0)//판위에 말이 없고 대기중인 말이 있다면 0,0에 새로 만들고
+			if(nowPlayer.getPieces().size()==0 && nowPlayer.getPieceNum()>0)//판위에 말이 없고 대기중인 말이 있다면 0,0에 새로 만들고
 			{
 				control=2;
 				phaze2PutOnBoard();
@@ -142,9 +162,9 @@ public class PlayGame implements ActionListener{
 						index = nowPlayer.checkEnable(posx, posy+result);
 						//이 지점에서 생기는 버그: 말 A가 이동해 말 B 위에 업혔다. 그럼 말 B point += 말 A point 하고 말 A 객체 삭제
 						//말 A가 삭제되었으니 piece(==말)의 Arraylist의 index에 말이 없어서 범위 익셉션 뜸 그래서 index를 갱신해 줘야함
-						x = nowPlayer.getPiece().get(index).getX();
-						y = nowPlayer.getPiece().get(index).getY();
-						point = nowPlayer.getPiece().get(index).getPoint();
+						x = nowPlayer.getPieces().get(index).getX();
+						y = nowPlayer.getPieces().get(index).getY();
+						point = nowPlayer.getPieces().get(index).getPoint();
 						board.printPiece(turn,x,y,point);
 					}
 					else if(nowPlayer.checkPiecein() ==1)
@@ -153,14 +173,19 @@ public class PlayGame implements ActionListener{
 					}
 					else
 					{
-						x = nowPlayer.getPiece().get(index).getX();
-						y = nowPlayer.getPiece().get(index).getY();
-						point = nowPlayer.getPiece().get(index).getPoint();
+						x = nowPlayer.getPieces().get(index).getX();
+						y = nowPlayer.getPieces().get(index).getY();
+						point = nowPlayer.getPieces().get(index).getPoint();
 						board.printPiece(turn,x,y,point);//플레이어, 이동 이후 좌표
+
 					}
-					board.setplayerInfo(turn, nowPlayer.playerPiece());
+
+					for(int i=0; i<playerNum; i++) {
+						board.setplayerInfo(i, players[i].playerPiece());
+					}
+					
 					phaze2changeBtncolor();//UI 버튼 색깔 변경
-					if(nowPlayer.getPieceNum()<=0 && nowPlayer.getPiece().size()<=0)//대기중인 말과 판위에 말이 없으면
+					if(nowPlayer.getPieceNum()<=0 && nowPlayer.getPieces().size()<=0)//대기중인 말과 판위에 말이 없으면
 					{
 						control=-1;//경기 종료
 						System.out.println("경기 종료");
@@ -219,14 +244,14 @@ public class PlayGame implements ActionListener{
 		{
 			board.buttonColor("newPieceBtnON");//새로운 말 버튼 활성화
 		}
-		if(nowPlayer.getPiece().size()>0)//판에 말이 있다면 
+		if(nowPlayer.getPieces().size()>0)//판에 말이 있다면 
 		{
 			board.buttonColor("clickBoardON");//판 클릭 버튼 활성화
 		}
 	}
 	
 	void phaze2changeBtncolor() {
-		if(nowPlayer.getPiece().size()>0)
+		if(nowPlayer.getPieces().size()>0)
 		{
 			board.buttonColor("clickBoardON");
 		}

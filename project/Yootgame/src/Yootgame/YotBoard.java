@@ -1,7 +1,18 @@
 package Yootgame;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class YotBoard extends JFrame {
 	private JPanel panelPan;
@@ -19,12 +30,19 @@ public class YotBoard extends JFrame {
 	JLabel yotResult;
 	JLabel boardMessage;
 	JLabel []playerInfo;
+	
+	JLabel line;
+	
 	public YotBoard(PlayGame playObject) {
 		play = playObject;
 		Toolkit tools = Toolkit.getDefaultToolkit();
 		Image mouseimg = tools.getImage("./img/cursor.png");
+		
 		Cursor newcursor = tools.createCustomCursor(mouseimg, new Point(0,0), "LOL");
 		setCursor(newcursor);
+		
+		line = new JLabel(new ImageIcon("./img/line.png"));
+		
 		panelPan = new JPanel();
 		panButton = new JButton [3][21];
 		int xpos=buttonSizeX*7;
@@ -32,6 +50,10 @@ public class YotBoard extends JFrame {
 		double buttonInterval=buttonSizeX*1.25;
    	 	panelPan.setLayout(null);
    	 	panelPan.setBackground(new Color(255,255,255));
+   	 
+		line.setSize(330,332);
+		line.setLocation(52,50);
+
    	 	for(int i=1;i<21;i++)
    	 	{
    	 		if(i<6) {
@@ -58,6 +80,7 @@ public class YotBoard extends JFrame {
 			}
 			panButton[0][i] = createBoardBtn(panButton[0][i],xpos,ypos,buttonSizeX,buttonSizeY,false);
 			panelPan.add(panButton[0][i]);
+			
 			panButton[0][i].addActionListener(play);
    	 	}
 		ypos =buttonSizeY-10;
@@ -83,6 +106,8 @@ public class YotBoard extends JFrame {
 					xpos -= buttonSizeX;
 					ypos += buttonSizeY;
 					panelPan.add(panButton[1][p]);
+			   	 	panelPan.add(line);
+
 					panButton[1][p].addActionListener(play);
 				}
 			}
@@ -102,6 +127,7 @@ public class YotBoard extends JFrame {
 					JButton arrow = new JButton(new ImageIcon("./img/leftup.jpg"));
 					arrow = createBoardBtn(arrow,xpos-buttonSizeX,ypos,buttonSizeX/2,buttonSizeY/2,false);
 					panelPan.add(arrow);
+
 				}else{
 					panButton[2][p] = new JButton(new ImageIcon("./img/circle.jpg"));
 				}
@@ -109,6 +135,8 @@ public class YotBoard extends JFrame {
 				xpos += buttonSizeX;
 				ypos += buttonSizeY;
 				panelPan.add(panButton[2][p]);
+		   	 	panelPan.add(line);
+
 				panButton[2][p].addActionListener(play);
 			}
 		}
@@ -151,7 +179,8 @@ public class YotBoard extends JFrame {
 		img[1] = new ImageIcon("./img/blue.jpg");
 		img[2] = new ImageIcon("./img/green.jpg");
 		img[3] = new ImageIcon("./img/yellow.jpg");
-		for(int i=0;i<4;i++)
+		
+		for(int i=0;i<play.getPlayerNum();i++)
 		{
 			playerInfobtn[i] = new JButton();
 			playerInfobtn[i].setIcon(img[i]);
