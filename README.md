@@ -1,7 +1,7 @@
 Yut-Game-Project
 ================
 
-Yut-Game Development with JAVA & OOAD(Tem Project)
+Yut-Game Development with JAVA & OOAD(Team Project)
 ---------------------------------------------------
 
 <br/>
