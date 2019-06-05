@@ -10,8 +10,6 @@ Yut-Game Development with JAVA & OOAD(Team Project)
 
 ### 주제 : "윷놀이 게임 개발"
 
-<br/>
-
 윷놀이 게임을 **객체지향 분석 및 설계(OOAD)** 를 통해 개발한다.
 
 <br/>
